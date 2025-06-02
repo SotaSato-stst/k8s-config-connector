@@ -122,7 +122,7 @@ func (a *BigtableAuthorizedViewAdapter) Find(ctx context.Context) (bool, error) 
 	log := klog.FromContext(ctx)
 	log.V(2).Info("getting BigtableAuthorizedView", "name", a.id)
 
-	bigtableauthorizedview, err := a.gcpClient.AuthorizedViewInfo(ctx, a.id.Parent().ID(), a.id.String())
+	bigtableauthorizedview, err := a.gcpClient.AuthorizedViewInfo(ctx, a.id.Parent().ID(), a.id.ID())
 	if err != nil {
 		if direct.IsNotFound(err) {
 			return false, nil
@@ -149,8 +149,20 @@ func (a *BigtableAuthorizedViewAdapter) Create(ctx context.Context, createOp *di
 	// Set the name field
 	resource.Name = a.id.String()
 
-	// Create the authorized view
-	subsetConf := &gcp.SubsetViewConf{}
+	familySubset := make(map[string]gcp.FamilySubset)
+	for key, ptrValue := range resource.GetSubsetView().FamilySubsets {
+		if ptrValue != nil {
+			familySubset[key] = gcp.FamilySubset{
+				Qualifiers:        ptrValue.Qualifiers,
+				QualifierPrefixes: ptrValue.QualifierPrefixes,
+			}
+		}
+	}
+
+	subsetConf := &gcp.SubsetViewConf{
+		RowPrefixes:   resource.GetSubsetView().RowPrefixes,
+		FamilySubsets: familySubset,
+	}
 	conf := &gcp.AuthorizedViewConf{
 		TableID:            a.id.Parent().ID(),
 		AuthorizedViewID:   a.id.ID(),
@@ -230,7 +242,20 @@ func (a *BigtableAuthorizedViewAdapter) Update(ctx context.Context, updateOp *di
 			paths = append(paths, "deletion_protection")
 		}
 
-		subsetConf := &gcp.SubsetViewConf{}
+		familySubset := make(map[string]gcp.FamilySubset)
+		for key, ptrValue := range resource.GetSubsetView().FamilySubsets {
+			if ptrValue != nil {
+				familySubset[key] = gcp.FamilySubset{
+					Qualifiers:        ptrValue.Qualifiers,
+					QualifierPrefixes: ptrValue.QualifierPrefixes,
+				}
+			}
+		}
+
+		subsetConf := &gcp.SubsetViewConf{
+			RowPrefixes:   resource.GetSubsetView().RowPrefixes,
+			FamilySubsets: familySubset,
+		}
 		conf := &gcp.AuthorizedViewConf{
 			TableID:            a.id.Parent().ID(),
 			AuthorizedViewID:   a.id.ID(),

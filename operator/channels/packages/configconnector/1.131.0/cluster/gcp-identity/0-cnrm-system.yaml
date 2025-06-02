@@ -3096,8 +3096,8 @@ spec:
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /var/secrets/google/key.json
-        image: gcr.io/gke-release/cnrm/controller:1.131.0
-        imagePullPolicy: Always
+        image: controller:5
+        imagePullPolicy: IfNotPresent
         name: manager
         ports:
         - containerPort: 23232

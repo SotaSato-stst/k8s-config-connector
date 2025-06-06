@@ -264,6 +264,7 @@ func (a *BigtableAuthorizedViewAdapter) Update(ctx context.Context, updateOp *di
 		}
 		updateConf := gcp.UpdateAuthorizedViewConf{
 			AuthorizedViewConf: *conf,
+			IgnoreWarnings:     true,
 		}
 		err := a.gcpClient.UpdateAuthorizedView(ctx, updateConf)
 		if err != nil {

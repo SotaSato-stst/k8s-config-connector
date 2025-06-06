@@ -35,6 +35,7 @@ type ServiceMappingLoader struct {
 
 func New() (*ServiceMappingLoader, error) {
 	serviceMappings, err := GetServiceMappings()
+
 	if err != nil {
 		return nil, fmt.Errorf("error loading service mappings: %w", err)
 	}
@@ -48,6 +49,7 @@ func NewFromServiceMappings(serviceMappings []v1alpha1.ServiceMapping) *ServiceM
 		groupToSM[sm.Name] = sm
 		serviceHostNameToSM[sm.Spec.ServiceHostName] = sm
 	}
+
 	loader := ServiceMappingLoader{
 		groupToSM:           groupToSM,
 		serviceHostNameToSM: serviceHostNameToSM,
@@ -57,6 +59,9 @@ func NewFromServiceMappings(serviceMappings []v1alpha1.ServiceMapping) *ServiceM
 
 func (s *ServiceMappingLoader) GetServiceMapping(name string) (*v1alpha1.ServiceMapping, error) {
 	sm, ok := s.groupToSM[name]
+	fmt.Printf("serviceMappingLoader.groupToSM(%#v)\n", s.groupToSM)
+
+	fmt.Printf("serviceMappingLoader.GetServiceMapping(%#v)\n", sm)
 	if !ok {
 		return nil, fmt.Errorf("unable to get service mapping: no mapping with name '%v' found", name)
 	}
@@ -192,6 +197,7 @@ func GetServiceMappings() ([]v1alpha1.ServiceMapping, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error listing servicemappings: %w", err)
 	}
+	fmt.Printf("serviceMappingLoader.keys(%#v)\n", keys)
 
 	autoGenSMMap, err := autogenloader.GetServiceMappingMap()
 	if err != nil {
@@ -204,6 +210,7 @@ func GetServiceMappings() ([]v1alpha1.ServiceMapping, error) {
 		if err != nil {
 			return nil, err
 		}
+		fmt.Printf("serviceMappingLoader.sm(%#v)\n", sm)
 
 		// Merge autogen ResourceConfigs into the existent ServiceMapping
 		// configured manually.

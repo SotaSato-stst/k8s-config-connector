@@ -45,10 +45,12 @@ func AdapterForReference(ctx context.Context, reader client.Reader, sourceNamesp
 	if resourceRef.External != "" {
 		uri := ""
 		if !strings.HasPrefix(uri, "//") {
+			fmt.Printf("gkGroup=%v\n", resourceRef.External)
+
 			switch gk.Group {
 			case "privateca.cnrm.google.com":
 				uri = "//privateca.googleapis.com/" + resourceRef.External
-			case "bigtable.cnrm.googleapis.com":
+			case "bigtable.cnrm.cloud.google.com":
 				uri = "//bigtable.googleapis.com/" + resourceRef.External
 			default:
 				return nil, fmt.Errorf("unknown format for external reference for %v: %q", gk, resourceRef.External)

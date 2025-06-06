@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"strings"
 
+	iam "cloud.google.com/go/iam"
+	"cloud.google.com/go/iam/apiv1/iampb"
 	krm "github.com/GoogleCloudPlatform/k8s-config-connector/apis/bigtable/v1alpha1"
 	"github.com/GoogleCloudPlatform/k8s-config-connector/pkg/config"
 	"github.com/GoogleCloudPlatform/k8s-config-connector/pkg/controller/direct"
@@ -101,7 +103,32 @@ func (m *modelBigtableAuthorizedView) AdapterForObject(ctx context.Context, read
 }
 
 func (m *modelBigtableAuthorizedView) AdapterForURL(ctx context.Context, url string) (directbase.Adapter, error) {
-	// TODO: Support URLs
+	// Format is //bigtable.googleapis.com/projects/PROJECT_ID/instances/INSTANCE_ID/tables/TABLE_ID/authorizedViews/AUTHORIZED_VIEW_ID
+
+	fmt.Printf("AdapterUrl=%s\n", url)
+	if !strings.HasPrefix(url, "//bigtable.googleapis.com/") {
+		return nil, nil
+	}
+
+	tokens := strings.Split(strings.TrimPrefix(url, "//bigtable.googleapis.com/"), "/")
+	if len(tokens) == 8 && tokens[0] == "projects" && tokens[2] == "instances" && tokens[4] == "tables" && tokens[6] == "authorizedViews" {
+		projectID := tokens[1]
+		instanceID := tokens[3]
+		avClient, err := m.client(ctx, projectID, instanceID)
+		if err != nil {
+			return nil, err
+		}
+		id, err := krm.NewAuthorizedViewIdentityFromExternal(strings.TrimPrefix(url, "//bigtable.googleapis.com/"))
+		if err != nil {
+			return nil, err
+		}
+
+		return &BigtableAuthorizedViewAdapter{
+			id:        id,
+			gcpClient: avClient,
+		}, nil
+	}
+
 	return nil, nil
 }
 
@@ -344,4 +371,37 @@ func (a *BigtableAuthorizedViewAdapter) Delete(ctx context.Context, deleteOp *di
 	log.V(2).Info("successfully deleted BigtableAuthorizedView", "name", a.id)
 
 	return true, nil
+}
+
+func (a *BigtableAuthorizedViewAdapter) GetIAMPolicy(ctx context.Context) (*iampb.Policy, error) {
+	if a.id == nil {
+		return nil, fmt.Errorf("cannot get iam policy for missing resource")
+	}
+
+	iH := a.gcpClient.AuthorizedViewIAM(a.id.Parent().ID(), a.id.ID())
+	policy, err := iH.Policy(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("getting iam policy for %q: %w", a.fullyQualifiedName(), err)
+	}
+
+	return policy.InternalProto, nil
+}
+
+func (a *BigtableAuthorizedViewAdapter) SetIAMPolicy(ctx context.Context, policy *iampb.Policy) (*iampb.Policy, error) {
+	if a.id == nil {
+		return nil, fmt.Errorf("cannot get iam policy for missing resource")
+	}
+
+	iH := a.gcpClient.AuthorizedViewIAM(a.id.Parent().ID(), a.id.ID())
+	iamPolicy := &iam.Policy{InternalProto: policy}
+	err := iH.SetPolicy(ctx, iamPolicy)
+	if err != nil {
+		return nil, fmt.Errorf("setting iam policy for %q: %w", a.fullyQualifiedName(), err)
+	}
+
+	return policy, nil
+}
+
+func (a *BigtableAuthorizedViewAdapter) fullyQualifiedName() string {
+	return fmt.Sprintf("projects/%s/instances/%s/tables/%s/authorizedViews/%s", a.id.Parent().Parent.Parent.ProjectID, a.id.Parent().Parent.Id, a.id.Parent().ID(), a.id.ID())
 }

@@ -248,13 +248,8 @@ func (a *BigtableAuthorizedViewAdapter) Update(ctx context.Context, updateOp *di
 		}
 	}
 
-	rowPrefix := [][]byte{[]byte("")}
-	if resource.GetSubsetView().RowPrefixes != nil {
-		rowPrefix = resource.GetSubsetView().RowPrefixes
-	}
-
 	subsetView := &gcp.SubsetViewInfo{
-		RowPrefixes:   rowPrefix,
+		RowPrefixes:   resource.GetSubsetView().RowPrefixes,
 		FamilySubsets: familySubset,
 	}
 
@@ -290,8 +285,13 @@ func (a *BigtableAuthorizedViewAdapter) Update(ctx context.Context, updateOp *di
 			}
 		}
 
+		rowPrefix := [][]byte{[]byte("")}
+		if resource.GetSubsetView().RowPrefixes != nil {
+			rowPrefix = resource.GetSubsetView().RowPrefixes
+		}
+
 		subsetConf := &gcp.SubsetViewConf{
-			RowPrefixes:   resource.GetSubsetView().RowPrefixes,
+			RowPrefixes:   rowPrefix,
 			FamilySubsets: familySubset,
 		}
 		conf := &gcp.AuthorizedViewConf{

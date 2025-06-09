@@ -41,6 +41,21 @@ func (i *AuthorizedViewIdentity) ID() string {
 	return i.id
 }
 
+func (i *AuthorizedViewIdentity) Parent() *bigtablev1beta1.TableIdentity {
+	return i.parent
+}
+
+func NewAuthorizedViewIdentityFromExternal(e string) (*AuthorizedViewIdentity, error) {
+	actualParent, actualResourceID, err := ParseAuthorizedViewExternal(e)
+	if err != nil {
+		return nil, err
+	}
+	return &AuthorizedViewIdentity{
+		id:     actualResourceID,
+		parent: actualParent,
+	}, nil
+}
+
 // New builds a AuthorizedViewIdentity from the Config Connector AuthorizedView object.
 func NewAuthorizedViewIdentity(ctx context.Context, reader client.Reader, obj *BigtableAuthorizedView) (*AuthorizedViewIdentity, error) {
 

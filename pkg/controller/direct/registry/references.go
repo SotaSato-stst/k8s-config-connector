@@ -41,11 +41,9 @@ func AdapterForReference(ctx context.Context, reader client.Reader, sourceNamesp
 	if gk.Group == "" {
 		return nil, fmt.Errorf("cannot find group for reference %v (must set apiVersion)", resourceRef)
 	}
-	fmt.Printf("adapterUrl=%v\n", resourceRef.External)
 	if resourceRef.External != "" {
 		uri := ""
 		if !strings.HasPrefix(uri, "//") {
-			fmt.Printf("gkGroup=%v\n", resourceRef.External)
 
 			switch gk.Group {
 			case "privateca.cnrm.google.com":

@@ -77,13 +77,6 @@ spec:
           kind: BigtableInstance
           version: v1beta1
           group: bigtable.cnrm.cloud.google.com
-    iamConfig:
-      policyName: google_bigtable_table_iam_policy
-      policyMemberName: google_bigtable_table_iam_member
-      referenceField:
-        name: table
-        type: name
-      supportsConditions: true
   - name: google_bigtable_gc_policy
     kind: BigtableGCPolicy
     skipImport: true

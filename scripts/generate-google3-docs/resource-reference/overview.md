@@ -654,11 +654,11 @@ issues for {{product_name_short}}.
   <td><a href="/config-connector/docs/reference/resource-docs/logging/logginglogview.md">LoggingLogView</a></td>
 </tr>
 <tr>
-  <td><a href="/managed-service-for-apache-kafka/docs">{{managedkafka_name}}</a></td>
+  <td><a href="/managed-service-for-apache-kafka/docs">{{managed_kafka_name}}</a></td>
   <td><a href="/config-connector/docs/reference/resource-docs/managedkafka/managedkafkacluster.md">ManagedKafkaCluster</a></td>
 </tr>
 <tr>
-  <td><a href="/managed-service-for-apache-kafka/docs">{{managedkafka_name}}</a></td>
+  <td><a href="/managed-service-for-apache-kafka/docs">{{managed_kafka_name}}</a></td>
   <td><a href="/config-connector/docs/reference/resource-docs/managedkafka/managedkafkatopic.md">ManagedKafkaTopic</a></td>
 </tr>
 <tr>
@@ -711,7 +711,7 @@ issues for {{product_name_short}}.
 </tr>
 <tr>
   <td><a href="/notebooks/docs/">Notebooks</a></td>
-  <td><a href="/config-connector/docs/reference/resource-docs/notebooks/notebooksinstance.md">NotebooksInstance</a></td>
+  <td><a href="/config-connector/docs/reference/resource-docs/notebooks/notebookinstance.md">NotebooksInstance</a></td>
 </tr>
 <tr>
   <td><a href="/compute/docs/osconfig/rest/">OS Config</a></td>
@@ -802,11 +802,11 @@ issues for {{product_name_short}}.
   <td><a href="/config-connector/docs/reference/resource-docs/secretmanager/secretmanagersecretversion.md">SecretManagerSecretVersion</a></td>
 </tr>
 <tr>
-  <td><a href="/secure-source-manager/docs/">{{secure_source_manager_name}}</a></td>
+  <td><a href="/secure-source-manager/docs/">{{ssm_name}}</a></td>
   <td><a href="/config-connector/docs/reference/resource-docs/securesourcemanager/securesourcemanagerinstance.md">SecureSourceManagerInstance</a></td>
 </tr>
 <tr>
-  <td><a href="/secure-source-manager/docs/">{{secure_source_manager_name}}</a></td>
+  <td><a href="/secure-source-manager/docs/">{{ssm_name}}</a></td>
   <td><a href="/config-connector/docs/reference/resource-docs/securesourcemanager/securesourcemanagerrepository.md">SecureSourceManagerRepository</a></td>
 </tr>
 <tr>
@@ -872,6 +872,10 @@ issues for {{product_name_short}}.
 <tr>
   <td><a href="/sql/docs/">{{sql_name}}</a></td>
   <td><a href="/config-connector/docs/reference/resource-docs/sql/sqluser.md">SQLUser</a></td>
+</tr>
+<tr>
+  <td><a href="/storage/docs/">{{storage_name}}</a></td>
+  <td><a href="/config-connector/docs/reference/resource-docs/storage/storageanywherecache.md">StorageAnywhereCache</a></td>
 </tr>
 <tr>
   <td><a href="/storage/docs/">{{storage_name}}</a></td>
@@ -944,6 +948,10 @@ issues for {{product_name_short}}.
 <tr>
   <td><a href="/vertex-ai/docs/">{{vertex_ai_name}}</a></td>
   <td><a href="/config-connector/docs/reference/resource-docs/vertexai/vertexaiindex.md">VertexAIIndex</a></td>
+</tr>
+<tr>
+  <td><a href="/vertex-ai/docs/">{{vertex_ai_name}}</a></td>
+  <td><a href="/config-connector/docs/reference/resource-docs/vertexai/vertexaimetadatastore.md">VertexAIMetadataStore</a></td>
 </tr>
 <tr>
   <td><a href="/vpc/docs/">{{serverless_vpc_access_name}}</a></td>

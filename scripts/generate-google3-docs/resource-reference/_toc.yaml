@@ -277,6 +277,8 @@ toc:
   section:
   - title: "StorageBucket"
     path: /config-connector/docs/reference/resource-docs/storage/storagebucket.md
+  - title: "StorageAnywhereCache"
+    path: /config-connector/docs/reference/resource-docs/storage/storageanywherecache.md
   - title: "StorageBucketAccessControl"
     path: /config-connector/docs/reference/resource-docs/storage/storagebucketaccesscontrol.md
   - title: "StorageDefaultObjectAccessControl"
@@ -510,7 +512,7 @@ toc:
 - title: "Notebooks"
   section:
   - title: "NotebooksInstance"
-    path: "/config-connector/docs/reference/resource-docs/notebooks/notebooksinstance.md"
+    path: "/config-connector/docs/reference/resource-docs/notebooks/notebookinstance.md"
 - title: "Private CA"
   section:
   - title: "PrivateCACAPool"
@@ -599,6 +601,8 @@ toc:
     path: /config-connector/docs/reference/resource-docs/vertexai/vertexaiendpoint.md
   - title: "VertexAIIndex"
     path: /config-connector/docs/reference/resource-docs/vertexai/vertexaiindex.md
+  - title: "VertexAIMetadataStore"
+    path: /config-connector/docs/reference/resource-docs/vertexai/vertexaimetadatastore.md
 - title: "VPC Access"
   section:
   - title: "VPCAccessConnector"

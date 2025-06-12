@@ -737,6 +737,16 @@ var SupportedGVKs = map[schema.GroupVersionKind]GVKMetadata{
 	{
 		Group:   "bigquerydatapolicy.cnrm.cloud.google.com",
 		Version: "v1alpha1",
+		Kind:    "BigQueryDataPolicy",
+	}: {
+		Labels: map[string]string{
+			"cnrm.cloud.google.com/managed-by-kcc": "true",
+			"cnrm.cloud.google.com/system":         "true",
+		},
+	},
+	{
+		Group:   "bigquerydatapolicy.cnrm.cloud.google.com",
+		Version: "v1alpha1",
 		Kind:    "BigQueryDataPolicyDataPolicy",
 	}: {
 		Labels: map[string]string{
@@ -4970,7 +4980,7 @@ var SupportedGVKs = map[schema.GroupVersionKind]GVKMetadata{
 	},
 	{
 		Group:   "storage.cnrm.cloud.google.com",
-		Version: "v1alpha1",
+		Version: "v1beta1",
 		Kind:    "StorageAnywhereCache",
 	}: {
 		Labels: map[string]string{
@@ -5283,6 +5293,17 @@ var SupportedGVKs = map[schema.GroupVersionKind]GVKMetadata{
 	{
 		Group:   "vertexai.cnrm.cloud.google.com",
 		Version: "v1alpha1",
+		Kind:    "VertexAIMetadataStore",
+	}: {
+		Labels: map[string]string{
+			"cnrm.cloud.google.com/managed-by-kcc":  "true",
+			"cnrm.cloud.google.com/stability-level": "alpha",
+			"cnrm.cloud.google.com/system":          "true",
+		},
+	},
+	{
+		Group:   "vertexai.cnrm.cloud.google.com",
+		Version: "v1beta1",
 		Kind:    "VertexAIMetadataStore",
 	}: {
 		Labels: map[string]string{

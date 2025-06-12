@@ -37,6 +37,8 @@ const (
 	UpToDate                             = "UpToDate"
 	UpToDateMessage                      = "The resource is up to date"
 	Created                              = "Created"
+	Creating                             = "Creating"
+	CreatingMessage                      = "The resource is being created"
 	CreatedMessage                       = "Successfully created"
 	CreateFailed                         = "CreateFailed"
 	CreateFailedMessageTmpl              = "Create call failed: %v"
@@ -125,6 +127,8 @@ var (
 	SupportsSSAAnnotation = FormatAnnotation("supports-ssa")
 
 	BlueprintAttributionAnnotation = FormatAnnotation("blueprint")
+
+	AlphaReconcilerAnnotation = "alpha.cnrm.cloud.google.com/reconciler"
 
 	// TODO(kcc-eng): Adjust the timeout back down after b/237398742 is fixed.
 	WebhookTimeoutSeconds = int32(10)

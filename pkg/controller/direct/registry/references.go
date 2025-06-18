@@ -41,13 +41,15 @@ func AdapterForReference(ctx context.Context, reader client.Reader, sourceNamesp
 	if gk.Group == "" {
 		return nil, fmt.Errorf("cannot find group for reference %v (must set apiVersion)", resourceRef)
 	}
-
 	if resourceRef.External != "" {
 		uri := ""
 		if !strings.HasPrefix(uri, "//") {
+
 			switch gk.Group {
 			case "privateca.cnrm.google.com":
 				uri = "//privateca.googleapis.com/" + resourceRef.External
+			case "bigtable.cnrm.cloud.google.com":
+				uri = "//bigtable.googleapis.com/" + resourceRef.External
 			default:
 				return nil, fmt.Errorf("unknown format for external reference for %v: %q", gk, resourceRef.External)
 			}

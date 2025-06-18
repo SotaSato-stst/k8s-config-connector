@@ -195,7 +195,6 @@ func (a *BigtableAuthorizedViewAdapter) Create(ctx context.Context, createOp *di
 		RowPrefixes:   rowPrefix,
 		FamilySubsets: familySubset,
 	}
-	subsetConf.AddRowPrefix([]byte(""))
 	conf := &gcp.AuthorizedViewConf{
 		TableID:            a.id.Parent().ID(),
 		AuthorizedViewID:   a.id.ID(),

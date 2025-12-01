@@ -137,7 +137,7 @@ func AuthorizedView_SubsetView_v1alpha1_FromProto(mapCtx *direct.MapContext, in 
 	}
 	out := &krmbigtablev1alpha1.AuthorizedView_SubsetView{}
 	out.RowPrefixes = in.RowPrefixes
-	// MISSING: FamilySubsets
+	out.FamilySubsets = direct.Map_FromProto(mapCtx, in.FamilySubsets, AuthorizedView_FamilySubsets_v1alpha1_FromProto)
 	return out
 }
 func AuthorizedView_SubsetView_v1alpha1_ToProto(mapCtx *direct.MapContext, in *krmbigtablev1alpha1.AuthorizedView_SubsetView) *pb.AuthorizedView_SubsetView {
@@ -146,7 +146,7 @@ func AuthorizedView_SubsetView_v1alpha1_ToProto(mapCtx *direct.MapContext, in *k
 	}
 	out := &pb.AuthorizedView_SubsetView{}
 	out.RowPrefixes = in.RowPrefixes
-	// MISSING: FamilySubsets
+	out.FamilySubsets = direct.Map_ToProto(mapCtx, in.FamilySubsets, AuthorizedView_FamilySubsets_v1alpha1_ToProto)
 	return out
 }
 func AutoscalingLimits_v1alpha1_FromProto(mapCtx *direct.MapContext, in *pb.AutoscalingLimits) *krmbigtablev1alpha1.AutoscalingLimits {

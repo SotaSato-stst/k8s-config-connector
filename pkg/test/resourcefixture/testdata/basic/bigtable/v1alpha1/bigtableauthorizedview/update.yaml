@@ -1,0 +1,39 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: bigtable.cnrm.cloud.google.com/v1alpha1
+kind: BigtableAuthorizedView
+metadata:
+  name: authorizedview-${uniqueId}
+spec:
+  tableRef:
+    name: authorizedview-dep-${uniqueId}
+  subsetView:
+    rowPrefixes:
+    - cHJlZml4MQ== # base64 encoded "prefix1"
+    - cHJlZml4Mw== # base64 encoded "prefix3" (changed from prefix2)
+    - cHJlZml4NA== # base64 encoded "prefix4" (added)
+    familySubsets:
+      col-family1:
+        qualifiers:
+        - cXVhbDMK # base64 encoded "qual3\n" (changed)
+        qualifierPrefixes:
+        - cXVhbC0= # base64 encoded "qual-"
+        - cHJlZml4LQ== # base64 encoded "prefix-" (added)
+      col-family2:
+        qualifiers:
+        - cXVhbDQK # base64 encoded "qual4\n" (added)
+        qualifierPrefixes:
+        - cXVhbDUtCg== # base64 encoded "qual5-\n" (changed from empty)
+  deletionProtection: false # changed from true

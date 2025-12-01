@@ -46,8 +46,10 @@ type AuthorizedView_SubsetView struct {
 	// +kcc:proto:field=google.bigtable.admin.v2.AuthorizedView.SubsetView.row_prefixes
 	RowPrefixes [][]byte `json:"rowPrefixes,omitempty"`
 
-	// TODO: unsupported map type with key string and value message
-
+	// Map from column family name to the columns in this family to be included
+	//  in the AuthorizedView.
+	// +kcc:proto:field=google.bigtable.admin.v2.AuthorizedView.SubsetView.family_subsets
+	FamilySubsets map[string]*AuthorizedView_FamilySubsets `json:"familySubsets,omitempty"`
 }
 
 // +kcc:proto=google.bigtable.admin.v2.AutoscalingLimits
@@ -108,7 +110,8 @@ type Any struct {
 	//
 	//  Note: this functionality is not currently available in the official
 	//  protobuf release, and it is not used for type URLs beginning with
-	//  type.googleapis.com.
+	//  type.googleapis.com. As of May 2023, there are no widely used type server
+	//  implementations and no plans to implement one.
 	//
 	//  Schemes other than `http`, `https` (or the empty scheme) might be
 	//  used with implementation specific semantics.

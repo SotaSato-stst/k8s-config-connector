@@ -38,7 +38,7 @@ FROM gcr.io/gke-release/gke-distroless/static:gke_distroless_20230307.00_p0 AS f
 WORKDIR /configconnector/
 COPY --from=packager /configconnector /configconnector
 ENV PATH="/configconnector/:${PATH}"
-ENV KCC_USE_DIRECT_RECONCILERS="BigQueryDataset"
+ENV KCC_USE_DIRECT_RECONCILERS="BigQueryDataset,CloudIdentityGroup"
 
 # Set the user to user with UID 1000 for subsequent commands
 USER 1000

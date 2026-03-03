@@ -43,3 +43,104 @@ func TestStringDuration_ToProto(t *testing.T) {
 		t.Fatalf("google.protobuf.Duration -> String error: %s", mapctx.Err())
 	}
 }
+
+// Test message types for Map functions
+type testProtoMessage struct {
+	Value string
+}
+
+type testKRMMessage struct {
+	Value string
+}
+
+func TestMap_FromProto(t *testing.T) {
+	mapCtx := &MapContext{}
+
+	// Test mapper function
+	mapper := func(mapCtx *MapContext, in *testProtoMessage) *testKRMMessage {
+		if in == nil {
+			return nil
+		}
+		return &testKRMMessage{Value: in.Value}
+	}
+
+	// Test data
+	input := map[string]*testProtoMessage{
+		"key1": &testProtoMessage{Value: "value1"},
+		"key2": &testProtoMessage{Value: "value2"},
+	}
+
+	// Call Map_FromProto
+	result := Map_FromProto(mapCtx, input, mapper)
+
+	// Verify results
+	if len(result) != 2 {
+		t.Errorf("Expected 2 items, got %d", len(result))
+	}
+
+	if result["key1"].Value != "value1" {
+		t.Errorf("Expected value1, got %s", result["key1"].Value)
+	}
+
+	if result["key2"].Value != "value2" {
+		t.Errorf("Expected value2, got %s", result["key2"].Value)
+	}
+
+	// Test nil input
+	nilResult := Map_FromProto(mapCtx, nil, mapper)
+	if nilResult != nil {
+		t.Errorf("Expected nil result for nil input")
+	}
+
+	// Test empty map
+	emptyResult := Map_FromProto(mapCtx, map[string]*testProtoMessage{}, mapper)
+	if len(emptyResult) != 0 {
+		t.Errorf("Expected empty map, got %d items", len(emptyResult))
+	}
+}
+
+func TestMap_ToProto(t *testing.T) {
+	mapCtx := &MapContext{}
+
+	// Test mapper function
+	mapper := func(mapCtx *MapContext, in *testKRMMessage) *testProtoMessage {
+		if in == nil {
+			return nil
+		}
+		return &testProtoMessage{Value: in.Value}
+	}
+
+	// Test data
+	input := map[string]*testKRMMessage{
+		"key1": &testKRMMessage{Value: "value1"},
+		"key2": &testKRMMessage{Value: "value2"},
+	}
+
+	// Call Map_ToProto
+	result := Map_ToProto(mapCtx, input, mapper)
+
+	// Verify results
+	if len(result) != 2 {
+		t.Errorf("Expected 2 items, got %d", len(result))
+	}
+
+	if result["key1"].Value != "value1" {
+		t.Errorf("Expected value1, got %s", result["key1"].Value)
+	}
+
+	if result["key2"].Value != "value2" {
+		t.Errorf("Expected value2, got %s", result["key2"].Value)
+	}
+
+	// Test nil input
+	nilResult := Map_ToProto(mapCtx, nil, mapper)
+	if nilResult != nil {
+		t.Errorf("Expected nil result for nil input")
+	}
+
+	// Test empty map
+	emptyResult := Map_ToProto(mapCtx, map[string]*testKRMMessage{}, mapper)
+	if len(emptyResult) != 0 {
+		t.Errorf("Expected empty map, got %d items", len(emptyResult))
+	}
+}

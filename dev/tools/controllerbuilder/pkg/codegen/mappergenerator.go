@@ -399,6 +399,7 @@ func (v *MapperGenerator) writeMapFunctionsForPair(out io.Writer, srcDir string,
 			if protoField.Cardinality() == protoreflect.Repeated {
 				useSliceFromProtoFunction := ""
 				useCustomMethod := ""
+				useMapFromProtoFunction := ""
 
 				switch protoField.Kind() {
 				case protoreflect.MessageKind:
@@ -441,13 +442,35 @@ func (v *MapperGenerator) writeMapFunctionsForPair(out io.Writer, srcDir string,
 						useSliceFromProtoFunction = ""
 					} else if keyKind == protoreflect.StringKind && valueKind == protoreflect.Int64Kind {
 						useSliceFromProtoFunction = ""
+					} else if keyKind == protoreflect.StringKind && valueKind == protoreflect.MessageKind {
+						// Extract the value type from the map type (e.g., map[string]*FooType -> FooType)
+						mapType := krmField.Type
+						valueType := ""
+						if strings.HasPrefix(mapType, "map[string]*") {
+							valueType = strings.TrimPrefix(mapType, "map[string]*")
+						} else if strings.HasPrefix(mapType, "map[string]") {
+							valueType = strings.TrimPrefix(mapType, "map[string]")
+						}
+
+						if valueType != "" {
+							functionName := valueType + versionSpecifier + "_FromProto"
+							useMapFromProtoFunction = functionName
+							// Clear the slice function since we're using map
+							useSliceFromProtoFunction = ""
+						}
 					} else {
 						fmt.Fprintf(out, "\t// TODO: map type %v %v for field %v\n", keyKind, valueKind, krmFieldName)
 						continue
 					}
 				}
 
-				if useSliceFromProtoFunction != "" {
+				if useMapFromProtoFunction != "" {
+					fmt.Fprintf(out, "\tout.%s = direct.Map_FromProto(mapCtx, in.%s, %s)\n",
+						krmFieldName,
+						krmFieldName,
+						useMapFromProtoFunction,
+					)
+				} else if useSliceFromProtoFunction != "" {
 					fmt.Fprintf(out, "\tout.%s = direct.Slice_FromProto(mapCtx, in.%s, %s)\n",
 						krmFieldName,
 						krmFieldName,
@@ -674,6 +697,7 @@ func (v *MapperGenerator) writeMapFunctionsForPair(out io.Writer, srcDir string,
 			if protoField.Cardinality() == protoreflect.Repeated {
 				useSliceToProtoFunction := ""
 				useCustomMethod := ""
+				useMapToProtoFunction := ""
 
 				switch protoField.Kind() {
 				case protoreflect.MessageKind:
@@ -719,13 +743,35 @@ func (v *MapperGenerator) writeMapFunctionsForPair(out io.Writer, srcDir string,
 						useSliceToProtoFunction = ""
 					} else if keyKind == protoreflect.StringKind && valueKind == protoreflect.Int64Kind {
 						useSliceToProtoFunction = ""
+					} else if keyKind == protoreflect.StringKind && valueKind == protoreflect.MessageKind {
+						// Extract the value type from the map type (e.g., map[string]*FooType -> FooType)
+						mapType := krmField.Type
+						valueType := ""
+						if strings.HasPrefix(mapType, "map[string]*") {
+							valueType = strings.TrimPrefix(mapType, "map[string]*")
+						} else if strings.HasPrefix(mapType, "map[string]") {
+							valueType = strings.TrimPrefix(mapType, "map[string]")
+						}
+
+						if valueType != "" {
+							functionName := valueType + versionSpecifier + "_ToProto"
+							useMapToProtoFunction = functionName
+							// Clear the slice function since we're using map
+							useSliceToProtoFunction = ""
+						}
 					} else {
 						fmt.Fprintf(out, "\t// TODO: map type %v %v for field %v\n", keyKind, valueKind, krmFieldName)
 						continue
 					}
 				}
 
-				if useSliceToProtoFunction != "" {
+				if useMapToProtoFunction != "" {
+					fmt.Fprintf(out, "\tout.%s = direct.Map_ToProto(mapCtx, in.%s, %s)\n",
+						protoFieldName,
+						krmFieldName,
+						useMapToProtoFunction,
+					)
+				} else if useSliceToProtoFunction != "" {
 					fmt.Fprintf(out, "\tout.%s = direct.Slice_ToProto(mapCtx, in.%s, %s)\n",
 						protoFieldName,
 						krmFieldName,
